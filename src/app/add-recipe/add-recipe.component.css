@@ -1,0 +1,140 @@
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+.row {
+  display: flex;
+  align-items: flex-start; /* Align items to the top */
+  justify-content: space-between;
+  gap: 30px; /* Space between image and form */
+}
+
+.col-md-6 {
+  flex: 0 0 48%; /* Ensure the image and form take up almost equal space */
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: auto; /* Limit image width */
+  transition: transform 0.5s ease;
+}
+
+/* Hover animation for image */
+img:hover {
+  transform: scale(1.05);
+}
+
+.form-container {
+  height: 751px; /* Increased height for more space */
+  overflow-y: auto;
+  padding-right: 10px;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.form-animate {
+  animation: slideIn 1s ease-out;
+}
+
+/* Form fields and button styles */
+input.form-control,
+textarea.form-control {
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 16px;
+  margin-bottom: 10px;
+  border: 1px solid #ced4da;
+}
+
+textarea.form-control {
+  height: 150px;
+  resize: none;
+}
+
+input.form-control,
+textarea.form-control {
+  background-color: #f1f1f1;
+}
+
+button {
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+/* Focus effect on form fields */
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+/* Button styles */
+.btn-danger {
+  background-color: #dc3545;
+}
+
+.btn-success {
+  background-color: #28a745;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  width: 100%;
+}
+
+.btn-primary:disabled {
+  background-color: #6c757d;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Keyframe animations */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

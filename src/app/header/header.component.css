@@ -1,0 +1,49 @@
+/* Header Animation: Fade in navbar items */
+.navbar-nav {
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+.navbar-nav .nav-item {
+  animation: slideIn 0.5s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.5s; /* Add delay for each item */
+}
+
+.navbar-nav .nav-item:nth-child(1) {
+  animation-delay: 0.6s;
+}
+
+.navbar-nav .nav-item:nth-child(2) {
+  animation-delay: 0.7s;
+}
+
+.navbar-nav .nav-item:nth-child(3) {
+  animation-delay: 0.8s;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Hover effect on navbar items */
+.navbar-nav .nav-link {
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+  transform: scale(1.1);
+  color: #f1f1f1; /* Light color for hover */
+}

@@ -1,0 +1,23 @@
+footer {
+  background-color: #28a745; /* Green background */
+  color: white; /* White text color */
+  padding: 1rem 0;
+  opacity: 0;
+  animation: fadeInFooter 1s forwards;
+}
+
+footer a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+footer a:hover {
+  color: #f1f1f1; /* Light color for hover */
+}
+
+@keyframes fadeInFooter {
+  to {
+    opacity: 1;
+  }
+}

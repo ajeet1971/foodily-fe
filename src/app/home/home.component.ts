@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ApiServiceService } from '../api-service.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, HttpClientModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   animations: [
@@ -21,8 +23,8 @@ import { Router } from '@angular/router';
     ]),
   ],
 })
-export class HomeComponent {
-  constructor(private router: Router) {}
+export class HomeComponent implements OnInit {
+  constructor(private router: Router, private apiService: ApiServiceService) {}
 
   recipes = [
     {
@@ -48,7 +50,17 @@ export class HomeComponent {
     // Add more image URLs here...
   ];
 
+  ngOnInit(): void {
+    this.getRecipe();
+  }
+
   viewRecipe(id: number): void {
     this.router.navigate(['/recipe', id]);
+  }
+
+  getRecipe() {
+    this.apiService.getRecipe().subscribe((resp) => {
+      console.log(resp);
+    });
   }
 }

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-home',
   standalone: true,

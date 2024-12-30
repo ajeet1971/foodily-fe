@@ -63,12 +63,14 @@ img:hover {
 
 /* Form fields and button styles */
 input.form-control,
-textarea.form-control {
+textarea.form-control,
+select.form-control {
   border-radius: 8px;
   padding: 10px;
   font-size: 16px;
   margin-bottom: 10px;
   border: 1px solid #ced4da;
+  background-color: #f1f1f1; /* Same background color as inputs */
 }
 
 textarea.form-control {
@@ -76,9 +78,12 @@ textarea.form-control {
   resize: none;
 }
 
-input.form-control,
-textarea.form-control {
-  background-color: #f1f1f1;
+select.form-control {
+  height: 40px; /* Set consistent height for the select element */
+  font-size: 16px; /* Match font size with input */
+  border-radius: 8px; /* Ensure consistency with input fields */
+  background-color: #f1f1f1; /* Same background color as input fields */
+  border: 1px solid #ced4da; /* Match the border color of inputs */
 }
 
 button {
@@ -91,7 +96,8 @@ button {
 /* Focus effect on form fields */
 input[type="text"]:focus,
 input[type="number"]:focus,
-textarea:focus {
+textarea:focus,
+select.form-control:focus {
   border-color: #007bff;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }

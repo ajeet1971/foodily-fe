@@ -33,10 +33,10 @@
         <div class="mb-3">
           <label for="image" class="form-label">Recipe Image URL</label>
           <input
-            type="text"
+            type="file"
             id="image"
+            (change)="onImageChange($event)"
             class="form-control"
-            formControlName="image"
             placeholder="Enter image URL"
           />
         </div>
@@ -71,6 +71,32 @@
           >
             <i class="bi bi-plus-circle"></i> Add Ingredient
           </button>
+        </div>
+
+        <div class="mb-3">
+          <label for="difficulty" class="form-label">Difficulty Level</label>
+          <select
+            id="difficulty"
+            class="form-control input-group"
+            formControlName="difficulty"
+          >
+            <option value="low">Low</option>
+            <option value="medium">Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <!-- Tag (Dropdown) -->
+        <div class="mb-3">
+          <label for="tag" class="form-label">Tag</label>
+          <select
+            id="tag"
+            class="form-control input-group"
+            formControlName="tag"
+          >
+            <option value="veg">Veg</option>
+            <option value="nonveg">Non-Veg</option>
+          </select>
         </div>
 
         <!-- Cooking Time -->
@@ -116,7 +142,7 @@
         <!-- Submit Button -->
         <button
           type="submit"
-          class="btn btn-primary"
+          class="btn btn-success"
           [disabled]="recipeForm.invalid"
         >
           Submit Recipe

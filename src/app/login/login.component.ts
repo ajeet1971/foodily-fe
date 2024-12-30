@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ToasterService } from '../toaster/toaster.component';
 import { passwordValidator } from '../password.validator';
+import { GlobalEmmiterServiceService } from '../global-emmiter-service.service';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,8 @@ export class LoginComponent {
     private apiServiceService: ApiServiceService,
     private roter: Router,
     private toaster: ToasterService,
-    private cd: ChangeDetectorRef
+    private cd: ChangeDetectorRef,
+    private globalEmmiterServiceService: GlobalEmmiterServiceService
   ) {}
 
   ngOnInit() {
@@ -110,6 +112,7 @@ export class LoginComponent {
       if (res?.status == 200) {
         localStorage.setItem('access_token', JSON.stringify(res.body.token));
         this.toaster.addMessage('success', 'You are logged in successfully!');
+        this.globalEmmiterServiceService.userLoggedIn.next(true);
         this.roter.navigate(['/']);
       }
     } catch (e) {

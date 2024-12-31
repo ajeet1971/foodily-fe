@@ -1,47 +1,45 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ApiServiceService } from '../services/api-service.service';
+import { Recipe } from '../models/recipe.model';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-recipe-details',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './recipe-details.component.html',
-  styleUrl: './recipe-details.component.css',
+  styleUrls: ['./recipe-details.component.css'],
 })
-export class RecipeDetailsComponent {
-  recipe: any;
+export class RecipeDetailsComponent implements OnInit {
+  recipe!: Recipe;
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private apiService: ApiServiceService,
+    private ngxUILoaderService: NgxUiLoaderService
+  ) {}
 
   ngOnInit(): void {
     const recipeId = this.route.snapshot.paramMap.get('id');
     this.getRecipeDetails(recipeId);
   }
 
-  getRecipeDetails(id: string | null): void {
-    this.recipe = {
-      id: '1',
-      title: 'Vegetarian Cheese Salad',
-      image: 'assets/recipe.jpg',
-      prepTime: 15,
-      cookTime: 30,
-      serves: 8,
-      ingredients: [
-        '4 Tbsp (57 gr) butter',
-        '2 large eggs',
-        '2 yogurt containers granulated sugar',
-        '1 vanilla or plain yogurt, 170g container',
-        '2 yogurt containers unbleached white flour',
-        '1.5 yogurt containers milk',
-        '1/4 tsp cinnamon',
-      ],
-      instructions: [
-        'Preheat the oven to 350°F (175°C).',
-        'Mix butter, sugar, and eggs in a bowl.',
-        'Add yogurt, flour, and cinnamon. Mix until smooth.',
-        'Pour into a greased pan and bake for 30 minutes.',
-      ],
-    };
+  async getRecipeDetails(id: string | null) {
+    try {
+      this.ngxUILoaderService.start();
+      const recipeData = await this.apiService.getRecipeByID(id).toPromise();
+      if (recipeData?.result) {
+        this.recipe = recipeData.result;
+        this.recipe.photo = this.apiService.getImageUrl(this.recipe);
+        this.recipe.ing = recipeData.result.ingredients.split(',');
+      }
+    } catch (error) {
+      console.error('Error fetching recipe details:', error);
+      // Handle errors gracefully (e.g., display an error message to the user)
+    } finally {
+      this.ngxUILoaderService.stop();
+    }
   }
 }

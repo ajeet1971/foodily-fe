@@ -29,6 +29,17 @@
           />
         </div>
 
+        <div class="mb-3">
+          <label for="description" class="form-label">Description </label>
+          <textarea
+            id="description"
+            class="form-control"
+            formControlName="description"
+            rows="3"
+            placeholder="Enter recipe description"
+          ></textarea>
+        </div>
+
         <!-- Image -->
         <div class="mb-3">
           <label for="image" class="form-label">Recipe Image URL</label>
@@ -42,7 +53,7 @@
         </div>
 
         <!-- Ingredients -->
-        <div class="mb-3">
+        <div class="mb-3 ingredients-container">
           <label class="form-label">Ingredients</label>
           <div
             formArrayName="ingredients"
@@ -51,18 +62,17 @@
           >
             <input
               type="text"
-              class="form-control"
+              class="form-control ingredient-input"
               [formControlName]="i"
               placeholder="Enter ingredient"
             />
-            <button
-              type="button"
-              class="btn btn-danger"
+            <span
+              class="remove-ingredient-btn"
               *ngIf="ingredients.length > 1"
               (click)="removeIngredient(i)"
             >
-              <i class="bi bi-dash-circle"></i>
-            </button>
+              <i class="fas fa-minus-circle"></i>
+            </span>
           </div>
           <button
             type="button"

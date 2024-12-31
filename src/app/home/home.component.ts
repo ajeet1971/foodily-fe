@@ -2,13 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ApiServiceService } from '../api-service.service';
+import { ApiServiceService } from '../services/api-service.service';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+
+import { Recipe } from '../models/recipe.model';
+import { SingleRecipeCardComponent } from '../componants/single-recipe-card/single-recipe-card.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [CommonModule, HttpClientModule, SingleRecipeCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   animations: [
@@ -24,43 +28,35 @@ import { HttpClientModule } from '@angular/common/http';
   ],
 })
 export class HomeComponent implements OnInit {
-  constructor(private router: Router, private apiService: ApiServiceService) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiServiceService,
+    private ngxUiLoderService: NgxUiLoaderService
+  ) {}
 
-  recipes = [
-    {
-      id: 1,
-      title: 'Sushi Easy Recipe',
-      description: 'Delicious and simple sushi recipe for beginners.',
-      image: 'path-to-sushi-image.jpg',
-    },
-    {
-      id: 2,
-      title: 'Homemade Burger',
-      description: 'Juicy and flavorful homemade burger.',
-      image: 'path-to-burger-image.jpg',
-    },
-    // Add more recipes here...
-  ];
-
-  images = [
-    'path-to-image1.jpg',
-    'path-to-image2.jpg',
-    'path-to-image3.jpg',
-    'path-to-image4.jpg',
-    // Add more image URLs here...
-  ];
-
+  recipes!: Recipe[];
+  silder!: Recipe[];
+  imageUrl = 'https://localhost:7088/';
   ngOnInit(): void {
     this.getRecipe();
   }
 
-  viewRecipe(id: number): void {
-    this.router.navigate(['/recipe', id]);
+  viewRecipe(id: number | undefined): void {
+    this.router.navigate(['/recipe-details', id]);
   }
 
-  getRecipe() {
-    this.apiService.getRecipe().subscribe((resp) => {
-      console.log(resp);
-    });
+  async getRecipe() {
+    try {
+      this.ngxUiLoderService.start();
+      let data = await this.apiService.getRecipe().toPromise();
+      if (data?.result.length) {
+        this.recipes = data.result;
+        this.recipes.map((x) => (x.photo = this.apiService.getImageUrl(x)));
+        this.silder = this.recipes.slice(0, 4);
+      }
+      this.ngxUiLoderService.stop();
+    } catch (e: any) {
+      // this.toastService.addMessage('warning', e.message);
+    }
   }
 }

@@ -9,18 +9,17 @@ import {
   Validators,
 } from '@angular/forms';
 
-import { ApiServiceService } from '../api-service.service';
-import { HttpClientModule } from '@angular/common/http';
+import { ApiServiceService } from '../services/api-service.service';
 import { Router } from '@angular/router';
-import { ToasterService } from '../toaster/toaster.component';
 import { passwordValidator } from '../password.validator';
-import { GlobalEmmiterServiceService } from '../global-emmiter-service.service';
+import { GlobalEmmiterServiceService } from '../services/global-emmiter-service.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule],
-  providers: [ApiServiceService],
+  imports: [ReactiveFormsModule, CommonModule],
+  providers: [ApiServiceService, ToastrService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -32,7 +31,7 @@ export class LoginComponent {
     private fb: FormBuilder,
     private apiServiceService: ApiServiceService,
     private roter: Router,
-    private toaster: ToasterService,
+    private toastr: ToastrService,
     private cd: ChangeDetectorRef,
     private globalEmmiterServiceService: GlobalEmmiterServiceService
   ) {}
@@ -108,14 +107,17 @@ export class LoginComponent {
   async login(payload: any) {
     try {
       let res = await this.apiServiceService.login(payload).toPromise();
-
+      console.log(res);
       if (res?.status == 200) {
         localStorage.setItem('access_token', JSON.stringify(res.body.token));
-        this.toaster.addMessage('success', 'You are logged in successfully!');
+
+        this.toastr.success('You are logged in sucessfully.', 'Success');
+        // this.toaster.addMessage('success', 'You are logged in successfully!');
         this.globalEmmiterServiceService.userLoggedIn.next(true);
         this.roter.navigate(['/']);
       }
-    } catch (e) {
+    } catch (e: any) {
+      this.toastr.error(e.error.message);
     } finally {
       this.initForm();
     }
@@ -124,12 +126,17 @@ export class LoginComponent {
   async signin(payload: any) {
     try {
       let res1 = await this.apiServiceService.signup(payload).toPromise();
-
       if (res1?.status == 200) {
         this.isSignUp = false;
         this.cd.detectChanges();
+        this.toastr.success('User registered Successfully!', 'Success');
+      } else {
+        this.toastr.error(res1.error.message);
       }
-    } catch (e) {
+    } catch (e: any) {
+      this.toastr.error(e.error.message);
+      // this.toastr.error(e.message);
+      console.log(e);
     } finally {
       this.initForm();
     }

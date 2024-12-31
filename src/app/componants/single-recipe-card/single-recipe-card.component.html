@@ -1,0 +1,16 @@
+<div class="card recipe-card">
+  <div class="card-img-top">
+    <img
+      [src]="recipe.photo"
+      [alt]="recipe.title"
+      class="img-fluid recipe-img"
+    />
+  </div>
+  <div class="card-body text-center">
+    <h5 class="card-title">{{ recipe.title }}</h5>
+    <p class="card-text">{{ recipe.description }}</p>
+    <button class="btn btn-success view-button" (click)="viewRecipe(recipe.id)">
+      View Recipe
+    </button>
+  </div>
+</div>

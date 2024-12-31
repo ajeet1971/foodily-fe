@@ -7,6 +7,9 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ApiServiceService } from '../services/api-service.service';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-add-recipe',
@@ -19,9 +22,15 @@ export class AddRecipeComponent {
   recipeForm: FormGroup;
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private apiService: ApiServiceService,
+    private ngxUiLoaderService: NgxUiLoaderService,
+    private toastr: ToastrService
+  ) {
     this.recipeForm = this.fb.group({
       title: ['', [Validators.required, Validators.maxLength(100)]],
+      description: [],
       image: ['', Validators.required],
       ingredients: this.fb.array([this.fb.control('', Validators.required)]),
       cookingTime: ['', [Validators.required, Validators.min(1)]],
@@ -56,27 +65,48 @@ export class AddRecipeComponent {
     }
   }
 
-  onSubmit(): void {
+  async onSubmit(): Promise<void> {
     if (this.recipeForm.valid) {
       console.log('Recipe Submitted:', this.recipeForm.value);
       let formData = new FormData();
       let ing = this.recipeForm?.value?.ingredients;
-      // Add JSON properties as individual form fields
+
       formData.append('title', this.recipeForm?.value?.title);
-      formData.append('image', this.recipeForm?.value?.image); // assuming this image is already uploaded or available
+      formData.append('Photo', this.recipeForm?.value?.image); // assuming this image is already uploaded or available
+      formData.append('Description', this.recipeForm?.value?.description);
+      formData.append('Cooktime', this.recipeForm?.value?.image);
+
       formData.append(
-        'ingredients',
+        'Ingredients',
         this.recipeForm.value.ingredients.join(', ')
       );
-      formData.append('cookingTime', this.recipeForm?.value?.cookingTime);
-      formData.append('prepTime', this.recipeForm?.value?.prepTime);
-      formData.append('instructions', this.recipeForm?.value?.instructions);
-      formData.append('tag', this.recipeForm?.value?.tag);
-      formData.append('difficulty', this.recipeForm?.value?.difficulty);
-      // Handle form submission logic here (e.g., send to API or store locally)
-      formData.forEach((value, key) => {
-        console.log(key + ' ' + value);
-      });
+      formData.append('Cooktime', this.recipeForm?.value?.cookingTime);
+      formData.append('Preptime', this.recipeForm?.value?.prepTime);
+      formData.append('Instruction', this.recipeForm?.value?.instructions);
+      formData.append('Tags', this.recipeForm?.value?.tag);
+      formData.append('Difficulty', this.recipeForm?.value?.difficulty);
+
+      await this.addRecipeApiCall(formData);
+    }
+  }
+
+  async addRecipeApiCall(formData: any) {
+    this.ngxUiLoaderService.start();
+    try {
+      let data = await this.apiService.addRecipe(formData).toPromise();
+
+      this.imagePreview = '';
+      this.recipeForm.get('image')?.setValue('');
+      let ingForm = this.recipeForm.get('ingredients') as FormArray;
+      ingForm.push(this.fb.control('', Validators.required));
+      this.ngxUiLoaderService.stop();
+      this.toastr.success('Recipe added successfully!');
+    } catch (e: any) {
+      this.toastr.error(e.error.message);
+      this.ngxUiLoaderService.stop();
+    } finally {
+      this.recipeForm.reset();
+      this.ngxUiLoaderService.stop();
     }
   }
 }

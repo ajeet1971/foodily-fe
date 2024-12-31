@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
-import { GlobalEmmiterServiceService } from '../global-emmiter-service.service';
+import { GlobalEmmiterServiceService } from '../services/global-emmiter-service.service';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({

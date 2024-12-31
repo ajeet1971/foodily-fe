@@ -1,29 +1,26 @@
-<div class="container mt-5 recipe-details">
-  <!-- Recipe Hero Section -->
+<div class="container mt-5 recipe-details" *ngIf="recipe">
   <div class="hero-section">
     <div class="hero-content">
-      <h1 class="recipe-title">{{ recipe?.title }}</h1>
+      <h1 class="recipe-title">{{ recipe.title }}</h1>
       <p class="recipe-meta">
-        <span class="date">April 05, 2018</span>
-        <span class="stars">⭐⭐⭐⭐☆</span>
-        <span class="badge bg-success">For Beginners</span>
+        <span class="badge bg-success">{{ recipe.tags }}</span>
       </p>
       <div class="hero-summary">
         <div class="hero-item">
-          <strong>Prep:</strong> {{ recipe?.prepTime }} mins
+          <strong>Prep:</strong> {{ recipe.preptime }} minutes
         </div>
         <div class="hero-item">
-          <strong>Cook:</strong> {{ recipe?.cookTime }} mins
+          <strong>Cook:</strong> {{ recipe.cooktime }} minutes
         </div>
         <div class="hero-item">
-          <strong>Yields:</strong> {{ recipe?.serves }} Servings
+          <strong>Difficulty:</strong> {{ recipe.difficulty }}
         </div>
       </div>
     </div>
     <div class="hero-image">
       <img
-        [src]="'/img/bg-img/breadcumb3.jpg'"
-        alt="{{ recipe?.title }}"
+        [src]="recipe.photo"
+        alt="{{ recipe.title }}"
         class="img-fluid rounded"
       />
     </div>
@@ -31,25 +28,23 @@
 
   <!-- Recipe Content -->
   <div class="row mt-5">
-    <!-- Instructions -->
     <div class="col-md-8">
       <div class="card p-4 instructions-card">
         <h3>Instructions</h3>
         <ol class="instructions">
-          <li *ngFor="let step of recipe?.instructions" class="animated-step">
-            {{ step }}
+          <li class="animated-step">
+            {{ recipe.instruction }}
           </li>
         </ol>
       </div>
     </div>
 
-    <!-- Ingredients -->
     <div class="col-md-4">
       <div class="card p-4 ingredients-card">
         <h3>Ingredients</h3>
         <ul class="ingredients">
           <li
-            *ngFor="let ingredient of recipe?.ingredients"
+            *ngFor="let ingredient of recipe?.ing"
             class="animated-ingredient"
           >
             {{ ingredient }}
